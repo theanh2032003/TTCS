@@ -1,7 +1,12 @@
 .widgetsOption {
     display: flex;
     align-items: center;
-    
+    padding: 10px 20px;
+    /* width: 100%; */
+  }
+
+  .widgetsOption:hover{
+    background-color: #97a0a0;
   }
   .profile-pic {
     border-radius: 50%;

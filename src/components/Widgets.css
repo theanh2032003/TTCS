@@ -27,7 +27,7 @@
   .widgets__widgetContainer {
     margin-top: 15px;
     margin-left: 20px;
-    padding: 20px;
+    /* padding: 20px; */ 
     background-color: #f5f8fa;
     border-radius: 20px;
   }
@@ -35,7 +35,13 @@
   .widgets__widgetContainer > h2 {
     font-size: 18px;
     font-weight: 800;
+    padding: 20px;
   }
+
+  .widgets__widgetContainer .widgetsOption:last-child:hover{
+    border-radius: 0px 0px 20px 20px;
+  }
+
 
   @media (max-width: 768px) {
     .widgets {

@@ -14,7 +14,10 @@ const Widgets = () => {
       <div className="widgets__widgetContainer">
         <h2>Who to follow</h2>
         
-        <WidgetsOption />
+        <WidgetsOption name="Thế Anh" id="1"/>
+        <WidgetsOption name="HÀ" id="2"/>
+        <WidgetsOption name="Thế Anh" id="3"/>
+
 
       </div>
     </div>
