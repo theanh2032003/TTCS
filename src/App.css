@@ -6,16 +6,8 @@ body {
 .app {
   display: grid;
   height: 100vh;
-  max-width: 1300px;
+  max-width: 100%;
   margin-left: auto;
   margin-right: auto;
-  padding: 0 10px;
-  flex-direction: row;
-  grid-template-columns: 1fr 4fr;
-  /* position: relative; */
-}
 
-.mainContainer{
-  display: grid;
-  grid-template-columns: 3fr 2fr;
 }

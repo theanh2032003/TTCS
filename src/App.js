@@ -1,18 +1,22 @@
 import './App.css';
-import SideBar from './components/SideBar';
-import Feed from './components/Feed';
-import Widgets from './components/Widgets'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './components/home/Home';
+import Login from './components/login/Login';
 function App() {
   return (
-    <div className="app">
-      
-      <SideBar/>
-      <div className='mainContainer'>
-      <Feed/>
-      <Widgets/>        
-      </div>
-
+    <div className='app'>
+    <Login/>     
     </div>
+ 
+    //   <Router>
+    //   <div className="app">
+    //     <Routes>
+    //       <Route exact path="/" component={Home} />
+    //       <Route path="/login" component={Login} />
+    //     </Routes>
+    //   </div>
+    // </Router>
+  
   );
 }
 
