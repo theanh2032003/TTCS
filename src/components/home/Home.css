@@ -1,7 +1,7 @@
   .homePage {
     display: grid;
     height: 100vh;
-    max-width: 1300px;
+    max-width: 100%;
     margin-left: auto;
     margin-right: auto;
     padding: 0 10px;
@@ -12,5 +12,5 @@
   
   .mainContainer{
     display: grid;
-    grid-template-columns: 3fr 2fr;
+    grid-template-columns: 4fr 2fr;
   }
