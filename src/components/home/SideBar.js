@@ -1,5 +1,6 @@
 import React from 'react';
 import "./SideBar.css";
+import { Link, useNavigate } from 'react-router-dom';
 import InterestsIcon from '@mui/icons-material/Interests';
 import SideBarOption from './SideBarOption';
 import HomeIcon from '@mui/icons-material/Home';
@@ -15,23 +16,25 @@ import { Button } from "@mui/material";
 
 
 
-function  SideBar () {
+function SideBar({ onOptionClick }) {
+
+  
   return (
     <div className='sidebar'>
-        <InterestsIcon className="sidebar__twitterIcon"/>
+      <InterestsIcon className="sidebar__twitterIcon"/>
 
-        <SideBarOption active Icon={HomeIcon} text="Home"/>
-        <SideBarOption Icon={SearchIcon} text="Explore"/>
-        <SideBarOption Icon={NotificationsNoneIcon} text="Botifications"/>
-        <SideBarOption Icon={ChatIcon} text="Messages" />
-        <SideBarOption Icon={PermIdentityIcon} text="Profile" />
-        <SideBarOption Icon={MoreHorizIcon} text="More" />
+      <SideBarOption Icon={HomeIcon} text="Home" onClick={() => onOptionClick('Feed')} />
+      <SideBarOption Icon={NotificationsNoneIcon} text="Botifications" onClick={() => onOptionClick('Notifications')} />
+      <SideBarOption Icon={ChatIcon} text="Messages" onClick={() => onOptionClick('Messages')} />
+      <SideBarOption Icon={PermIdentityIcon} text="Profile" onClick={() => onOptionClick('Profile')} />
+      <SideBarOption Icon={MoreHorizIcon} text="More" onClick={() => onOptionClick('More')} />
 
-        <Button variant="outlined" className="sidebar__tweet" fullWidth>
-            Tweet
-        </Button>
+
+      <Button variant="outlined" className="sidebar__tweet" fullWidth>
+        Tweet
+      </Button>
     </div>
-  )
+  );
 }
 
 export default SideBar

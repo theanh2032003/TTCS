@@ -20,7 +20,7 @@
     justify-content: center;
     margin-left: 10px;
   }
-  .follow-btn {
+  .widgetsOption .follow-btn {
     margin-left: auto;
     /* padding: 5px 10px; */
     border-radius: 20px;
@@ -28,10 +28,10 @@
     color: white;
     text-align: center;
     cursor: pointer;
-    font-size: 15px;
+    font-size: 12px;
     font-weight: 700;
   }
 
-  .follow-btn:hover{
+  .widgetsOption .follow-btn:hover{
     background-color: #404244;
   }

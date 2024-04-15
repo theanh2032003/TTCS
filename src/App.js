@@ -5,16 +5,14 @@ import Login from './components/login/Login';
 
 function App() {
   return (
-    // <div className='app'>
-    // {/* <Login/>      */}
-    // <Home/>
-    // </div>
+
  
  <Routes>
- <Route path='/' element={<Home />} />
- <Route path='/login' element={<Login />} />
- {/* <Route path='/products' element={<Products />} />
- <Route path='/customers' element={<Customers />} /> */}
+  
+ <Route path='/home/*' element={<Home />} />
+ <Route path='/' element={<Login />} />    
+
+
 </Routes>
   
   );

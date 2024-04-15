@@ -1,16 +1,24 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import "./Feed.css";
 import TweetBox from './TweetBox';
 import Post from './Post';
 import FlipMove from "react-flip-move";
+import { getAllPostOfNewFeed } from '../service/postService';
+
 const Feed = () => {
+
   const [posts, setPosts] = useState([]);
 
-  // useEffect(() => {
-  //   db.collection("posts").onSnapshot((snapshot) =>
-  //     setPosts(snapshot.docs.map((doc) => doc.data()))
-  //   );
-  // }, []);
+  useEffect(() => {
+
+    const getPost = async() => {
+      return await getAllPostOfNewFeed();
+    }
+    
+    setPosts(getPost());
+
+
+  },[]);
 
   return (
     <div className="feed">
@@ -21,8 +29,8 @@ const Feed = () => {
       <TweetBox />
 
       <FlipMove>
-        {posts.map((post) => (
-          <Post
+        {/* {posts.map((post) => (
+         return <Post
             key={post.text}
             displayName={post.displayName}
             username={post.username}
@@ -31,7 +39,7 @@ const Feed = () => {
             avatar={post.avatar}
             image={post.image}
           />
-        ))}
+        ))} */}
       </FlipMove>
     </div>
   );
