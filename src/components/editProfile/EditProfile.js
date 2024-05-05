@@ -13,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 const EditProfile = ({ user, onOptionClick }) => {
   const [avatar, setAvatar] = useState(null);
   const [banner, setBanner] = useState(null);
+  const [linkAvatar, setLinkAvatar] = useState(null);
+  const [linkBanner, setLinkBanner] = useState(null);
   const [fullname, setFullname] = useState("");
   const [bio, setBio] = useState("");
   const [location, setLocation] = useState("");
@@ -27,9 +29,16 @@ const EditProfile = ({ user, onOptionClick }) => {
     console.log(file);
     if (file) {
       const imageArray = Array.from(file);
-      return imageArray[0];
+      const linkImageArray = Array.from(file).map((file) =>
+        URL.createObjectURL(file)
+      );
+      console.log(linkImageArray[0])
+      console.log(imageArray[0])
+
+      return imageArray[0], linkImageArray[0];
     }
   };
+
   const getUserInfo = async (userId) => {
     let res = await getInfo(userId);
     let user = res.data;
@@ -39,6 +48,8 @@ const EditProfile = ({ user, onOptionClick }) => {
     setFullname(user.fullname);
     setBio(user.bio);
     setLocation(user.location);
+    setLinkAvatar(user.avatar);
+    setLinkBanner(user.banner);
   };
 
   const handleChangeInfo = async (e) => {
@@ -58,11 +69,11 @@ const EditProfile = ({ user, onOptionClick }) => {
     formData.append("fullname", fullname);
     formData.append("bio", bio);
     formData.append("location", location);
-    console.log(avatar);
-    console.log(banner);
-    console.log(fullname);
-    console.log(bio);
-    console.log(location);
+    // console.log(avatar);
+    // console.log(banner);
+    // console.log(fullname);
+    // console.log(bio);
+    // console.log(location);
     let res = axios
       .patch("/user/change_info", formData, {
         headers: {
@@ -75,6 +86,7 @@ const EditProfile = ({ user, onOptionClick }) => {
       .catch((error) => {
         console.log(error);
       });
+    navigate(`/home/profile/${userId}`);
   };
 
   useEffect(() => {
@@ -91,7 +103,12 @@ const EditProfile = ({ user, onOptionClick }) => {
     <div className={style.editProfile}>
       <div className={style.editHeader}>
         <div className={style.text}>
-          <div className={style.closeIcon} onClick={() => {navigate(`/home/profile/${userId}`)}}>
+          <div
+            className={style.closeIcon}
+            onClick={() => {
+              navigate(`/home/profile/${userId}`);
+            }}
+          >
             <CloseIcon />
           </div>
 
@@ -105,13 +122,24 @@ const EditProfile = ({ user, onOptionClick }) => {
       <div className={style.editBanner}>
         <img
           className={style.bannerImage}
-          src={banner || "/default/defaultBanner.jpg"}
+          src={linkBanner || "/default/defaultBanner.jpg"}
         />
         <input
           ref={fileInputRefBanner}
           type="file"
           style={{ display: "none" }}
-          onChange={(e) => setBanner(handleImageInput(e))}
+          onChange={(e) => {
+            const file = e.target.files;
+            if (file) {
+              const imageArray = Array.from(file);
+              const linkImageArray = Array.from(file).map((file) =>
+                URL.createObjectURL(file)
+              );
+              setBanner(imageArray[0]);
+              // Cập nhật linkAvatar khi chọn file mới
+              setLinkBanner(linkImageArray[0]);
+            }
+          }}
         />
         <div className={style.photoBannerIcon}>
           <AddPhotoAlternateIcon
@@ -126,7 +154,7 @@ const EditProfile = ({ user, onOptionClick }) => {
         <div className={style.avatarImage}>
           <Avatar
             className={style.avatar}
-            src={avatar || "/default/nullAvatar.jpg"}
+            src={linkAvatar || "/default/nullAvatar.jpg"}
           />
         </div>
 
@@ -134,7 +162,18 @@ const EditProfile = ({ user, onOptionClick }) => {
           ref={fileInputRefAvatar}
           type="file"
           style={{ display: "none" }}
-          onChange={(e) => setAvatar(handleImageInput(e))}
+          onChange={(e) => {
+            const file = e.target.files;
+            if (file) {
+              const imageArray = Array.from(file);
+              const linkImageArray = Array.from(file).map((file) =>
+                URL.createObjectURL(file)
+              );
+              setAvatar(imageArray[0]);
+              // Cập nhật linkAvatar khi chọn file mới
+              setLinkAvatar(linkImageArray[0]);
+            }
+          }}
         />
         <div className={style.photoAvatar}>
           <AddPhotoAlternateIcon

@@ -17,6 +17,8 @@ import SockJS from "sockjs-client";
 
 const MessagePage = () => {
   const contentRef = useRef(null);
+  const messagesWrapperRef = useRef(null);
+  const sendMessageRef = useRef(null);
   const [content, setContent] = useState("");
   const [images, setImages] = useState([]);
   const [inputImages, setInputImages] = useState([]);
@@ -26,8 +28,9 @@ const MessagePage = () => {
   const [user, setUser] = useState();
   const [stompClient, setStompClient] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
-  let id1 = (userId > userId2)? userId2:userId;
-  let id2 = (userId < userId2)? userId2:userId;
+  const [inputHeight, setInputHeight] = useState(0);
+  let id1 = userId > userId2 ? userId2 : userId;
+  let id2 = userId < userId2 ? userId2 : userId;
 
   const handleInsertImage = () => {
     let input = document.getElementById("imageInput");
@@ -111,7 +114,6 @@ const MessagePage = () => {
   useEffect(() => {
     getUser();
     getMessages();
-
   }, [userId]);
 
   useEffect(() => {
@@ -125,9 +127,9 @@ const MessagePage = () => {
       // console.log(`/topic/groupchat/${id1}_${id2}`);
       client.subscribe(`/topic/groupchat/${id1}_${id2}`, (message) => {
         console.log(message.body);
-        const messageBody = JSON.parse(message.body); 
+        const messageBody = JSON.parse(message.body);
         if (messageBody.type == "new message") {
-          console.log(1)
+          console.log(1);
           // getMessages();
           setMessages([...messages, messageBody.message]);
         }
@@ -141,6 +143,30 @@ const MessagePage = () => {
     };
   }, [stompClient]);
 
+  useEffect(() => {
+    // Nếu có thay đổi trong messages và messagesWrapper đã được render
+    if (messagesWrapperRef.current) {
+      // Cuộn xuống dưới cùng của messagesWrapper
+      messagesWrapperRef.current.scrollTop =
+        messagesWrapperRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    const updateMarginBottom = () => {
+      const sendMessageHeight = sendMessageRef.current.clientHeight;
+      messagesWrapperRef.current.style.marginBottom = `${sendMessageHeight}px`;
+    };
+
+    updateMarginBottom();
+
+    window.addEventListener("resize", updateMarginBottom);
+
+    return () => {
+      window.removeEventListener("resize", updateMarginBottom);
+    };
+  }, [content, images]);
+
   return (
     <div className={style.MessagePage}>
       {user && (
@@ -149,20 +175,28 @@ const MessagePage = () => {
           <p className={style.name}>{user.fullname}</p>
         </div>
       )}
+      <div
+        className={style.messagesWrapper}
+        id="messagesWrapper"
+        ref={messagesWrapperRef}
+      >
+        <div className={style.messagesContainer}>
+          {messages.length > 0 &&
+            messages.map((message) => (
+              <MessageOption
+                key={message.id}
+                id={message.id}
+                avatar={message.user.avatar}
+                content={message.text}
+                images={message.images}
+                userId={userId2}
+                mes_userId={message.user.id}
+              />
+            ))}
+        </div>
+      </div>
 
-      {messages.length > 0 &&
-        messages.map((message) => (
-          <MessageOption
-            id={message.id}
-            avatar={message.user.avatar}
-            content={message.text}
-            images={message.images}
-            userId={userId2}
-            mes_userId={message.user.id}
-          />
-        ))}
-
-      <div className={style.sendMessage}>
+      <div className={style.sendMessage} ref={sendMessageRef}>
         <div className={style.image}>
           <InsertPhotoIcon
             className={style.insertIcon}

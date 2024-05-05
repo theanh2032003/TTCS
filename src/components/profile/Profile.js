@@ -110,6 +110,24 @@ const Profile = ({}) => {
     getPosts(userId);
   }, [userId]);
 
+  
+  useEffect(() => {
+    console.log(userId);
+    if (localStorage.getItem("userId") != null) {
+      const userIdInLocalStorage = localStorage.getItem("userId");
+      if (userIdInLocalStorage === userId) {
+        setIsUser(true);
+      } else {
+        setTextFollowButton();
+        setIsUser(false);
+      }
+      getUserInfo(userId);
+      console.log(user);
+    }
+
+    getPosts(userId);
+  }, []);
+
   useEffect(() => {
     if (isPostActive === true) {
       getPosts(userId);
@@ -118,6 +136,7 @@ const Profile = ({}) => {
     }
     console.log("isActive đã thay đổi");
   }, [isPostActive]);
+
 
 
   useEffect(() => {

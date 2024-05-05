@@ -26,7 +26,7 @@ const Post = forwardRef(
     const navigate = useNavigate();
 
     const goToPostDetail = () =>{
-      navigate(`post/${postId}`)
+      navigate(`/home/post/${postId}`)
     }
 
     useEffect(() => {
@@ -39,7 +39,6 @@ const Post = forwardRef(
       checkLiked();
       console.log(isLiked);
       getLikes();
-      // console.log(isLiked);
       if (image.length > 1) {
         setHasImage(true);
       }
@@ -47,7 +46,6 @@ const Post = forwardRef(
 
     const getLikes = async () => {
       let res = await getLikesOfPost(postId);
-
       setLikeCount(res.data);
     };
 

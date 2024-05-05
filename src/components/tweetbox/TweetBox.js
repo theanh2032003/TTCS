@@ -36,6 +36,7 @@ const TweetBox = () => {
       const linkImageArray = Array.from(files).map((file) =>
         URL.createObjectURL(file)
       );
+      console.log(linkImageArray);
       const imageArray = Array.from(files);
       setTweetImages((prevImages) => [...prevImages, ...linkImageArray]);
       setImages((prevImages) => [...prevImages, ...imageArray]);

@@ -3,7 +3,8 @@
   flex-direction: column;
   height: 100vh;
   width: inherit;
-  padding-top: 80px;
+  overflow: auto;
+
   .header {
     display: flex;
     flex-direction: row;
@@ -12,7 +13,9 @@
     border-bottom: 1px solid var(--twitter-background);
     position: fixed;
     top: 0;
+    z-index: 99;
     width: inherit;
+    background-color: white;
     .avatar {
       height: 40px;
       width: 40px;
@@ -26,6 +29,19 @@
     }
   }
 
+  .messagesWrapper {
+    flex: 1;
+    overflow-y: auto; 
+    margin-top: 65px;
+    margin-bottom: 80px;
+    padding: 10px;
+    // margin-bottom: ;
+    .messagesContainer {
+      display: flex;
+      flex-direction: column-reverse;
+    }
+  }
+
   .sendMessage {
     display: flex;
     position: fixed;
@@ -36,6 +52,7 @@
     border-top: 1px solid var(--twitter-background);
     border-bottom: 1px solid var(--twitter-background);
     align-items: center;
+    background-color: white;
     .image {
       margin-left: 20px;
       .insertIcon {
