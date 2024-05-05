@@ -1,0 +1,44 @@
+.messageContainer{
+    margin: 5px 0;
+    .leftMessage{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: fit-content;
+        margin-left: 10px;
+        .avatar{
+            width: 35px;
+            height: 35px;
+        }
+
+        .message{
+            border-radius: 20px;
+            width: fit-content;
+            background-color: var(--twitter-background);
+            padding: 5px 15px;
+            margin-left: 10px;
+        }
+    }
+
+    .rightMessage{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: fit-content;
+        margin-right: 10px;
+        float: right;
+        .avatar{
+            width: 35px;
+            height: 35px;
+        }
+
+        .message{
+            color: white;
+            border-radius: 20px;
+            width: fit-content;
+            background-color: var(--twitter-color);
+            padding: 5px 15px;
+            margin-right: 10px;
+        }
+    }
+}

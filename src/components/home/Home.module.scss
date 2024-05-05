@@ -1,0 +1,63 @@
+@mixin breakpoint($point) {
+  @media only screen and (max-width: $point) {
+    @content;
+  }
+}
+
+.homePage {
+  display: flex;
+
+  .sidebar {
+    width: 280px;
+    position: fixed;
+    left: 320px;
+    top: 20px;
+    height: 100vh;
+
+    @include breakpoint(1280px) {
+      left: 110px;
+    }
+  }
+
+  .widget {
+    width: 350px;
+    position: fixed;
+    top: 10px;
+    right: 320px;
+    height: 100vh;
+
+    @include breakpoint(1280px) {
+      right: 110px;
+    }
+  }
+
+  .content {
+    width: 600px;
+    margin-left: 595px;
+    border-left: 1px solid var(--twitter-background);
+    border-right: 1px solid var(--twitter-background);
+    height: 100%;
+
+    @include breakpoint(1280px) {
+      margin-left: 190px;
+    }
+  }
+
+  .messageSearch{
+    margin-left: 595px;
+    height: 100vh;
+    width: 450px;
+    border-left: 1px solid var(--twitter-background);
+  }
+
+  .message{
+    height: 100%;
+    width: 600px;
+    border-right: 1px solid var(--twitter-background);
+    border-left: 1px solid var(--twitter-background);
+
+  }
+
+  
+
+}

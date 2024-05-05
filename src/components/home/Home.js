@@ -1,47 +1,62 @@
-import React, {useState, useEffect} from 'react'
-import "./Home.css";
-import SideBar from './SideBar';
-import Feed from './Feed';
-import Widgets from './Widgets';
-import Profile from './Profile';
-import Notification from './Notification';
-import { getAllPostOfNewFeed } from '../service/postService';
-import { searchUserApi } from '../service/userService';
-
+import React, { useState, useEffect } from "react";
+import styles from "./Home.module.scss";
+import SideBar from "../sidebar/SideBar";
+import Feed from "../feed/Feed";
+import Widgets from "../widget/Widgets";
+import Profile from "../profile/Profile";
+import Notification from "../notification/Notification";
+import EditProfile from "../editProfile/EditProfile";
+import PostDetail from "../PostDetail/PostDetail";
+import MessagePage from "../Message/MessagePage";
+import { getAllPostOfNewFeed } from "../service/postService";
+import { searchUserApi } from "../service/userService";
+import { Route, Routes, useLocation } from "react-router-dom";
+import MessageSearch from "../MessageSearch/MessageSearch";
 const Home = () => {
-
-  const [showFeed, setShowFeed] = useState(true); // Mặc định hiển thị Feed
-  const [showProfile, setShowProfile] = useState(false);
-  const [showNotification, setShowNotification] = useState(false);
-
-
-  const handleSideBarOptionClick = (option) => {
-    if (option === 'Feed') {
-      setShowFeed(true);
-      setShowProfile(false);
-      setShowNotification(false);
-    } else if (option === 'Profile') {
-      setShowProfile(true);
-      setShowFeed(false);
-      setShowNotification(false);
-    } else if (option === 'Notifications') {
-      setShowProfile(false);
-      setShowFeed(false);
-      setShowNotification(true);
-    }
-  };
-
+  const location = useLocation();
+  const showWidget =
+    location.pathname.startsWith("/home") &&
+    !location.pathname.startsWith("/home/message");
   return (
-    <div className='homePage'>
-        <SideBar onOptionClick={handleSideBarOptionClick} />
-        <div className='mainContainer'>
-        {showFeed && <Feed />}
-        {showProfile && <Profile />}
-        {showNotification && <Notification />}
-            <Widgets/>        
+    <div className={styles.homePage}>
+      <div className={styles.sidebar}>
+        <SideBar />
+      </div>
+      {showWidget && (
+        <div className={styles.content}>
+          <Routes>
+            <Route path="/profile/:userId" element={<Profile />} />
+            <Route path="/" element={<Feed />} />
+            <Route path="/notification" element={<Notification />} />
+            <Route path="/edit_profile" element={<EditProfile />} />
+            <Route path="/post/:postId" element={<PostDetail />} />
+          </Routes>
         </div>
+      )}
+
+      {showWidget && (
+        <div className={styles.widget}>
+          <Widgets />
+        </div>
+      )}
+
+      {!showWidget && (
+        <div className={styles.messageSearch}>
+          <MessageSearch/>
+        </div>
+      )}
+
+      {!showWidget && (
+        <div className={styles.message}>
+          <Routes>
+            <Route path="/message/:userId" element={<MessagePage />} />
+            <Route path="/message_null" element={<div style={{height:"100vh"}}></div>} />
+
+          </Routes>
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
 export default Home;

@@ -4,7 +4,7 @@ import axios from "axios";
 import "./Login.css";
 import CloseIcon from '@mui/icons-material/Close';
 import loginImage from "./loginImage.jpg";
-import { loginApi, registerApi, changePasswordApi } from '../service/userService';
+import { loginApi, registerApi, changePasswordApi, confirmTokenChangePassword, confirmRegister, reSendConfirmToken } from '../service/userService';
 
 const Login = () => {
 
@@ -36,24 +36,37 @@ const Login = () => {
     }
   }, [loginEmail]);
 
-
+  useEffect(() => {
+    if (!registerEmail) {
+      setErrorLoginMessage('Please enter your email.');
+    } else if (!emailRegex.test(registerEmail)) {
+      setErrorLoginMessage('Invalid email format.');
+    } else {
+      setErrorLoginMessage('');
+    }
+  }, [registerEmail]);
 
   const showRegisterForm = () => {
     setShowRegister(true);
     setShowLogin(false);
     setShowChangePassword(false);
+    setShowForm(true);
+    setShowConfirm(false);
   };
 
   const showLoginForm = () => {
     setShowLogin(true);
     setShowRegister(false);
     setShowChangePassword(false);
+    setShowForm(true);
+    setShowConfirm(false);
   };
 
   const showChangePasswordForm = () => {
     setShowLogin(false);
     setShowRegister(false);
     setShowChangePassword(true);
+    setErrorLoginMessage('');
   };
 
   const closeForm = () => {
@@ -63,13 +76,17 @@ const Login = () => {
   };
 
   const handleLogin = async() => {
-
+    
 
     try{
+    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('userId');
+
     let res = await loginApi(loginEmail, loginPassword); 
     localStorage.setItem('jwtToken', res.data.jwtToken);
     localStorage.setItem('userId',res.data.userId);
-    navigate('/home',{replace : true});  
+    navigate('/home',{replace : true});
+    window.location.reload();  
     } catch (error) {
       if (error.response) {
         const { data, status } = error.response;
@@ -96,7 +113,9 @@ const Login = () => {
     }
 
     try{
-    let res = await registerApi(registerEmail, registerPassword, registerFullName, registerTextId);      
+    let res = await registerApi(registerEmail, registerPassword, registerFullName, registerTextId);   
+    setShowForm(false);
+    setShowConfirm(true);   
     } catch(error){
       if (error.response) {
         const { data, status } = error.response;
@@ -111,12 +130,42 @@ const Login = () => {
         setErrorRegisterMessage('Something went wrong');
       }
     }
-
   }
 
-  const handleChangePassword = async(email,password) => {
+  const handleConfirmRegister = async() => {
     try{
-      let res = await changePasswordApi(email,password);
+      let res = await confirmRegister(confirmToken);
+      setShowForm(false);
+      setShowConfirm(false);  
+      setConfirmToken('');
+      setRegisterEmail('');
+      setRegisterFullname('');
+      setRegisterPassword('');
+      setRegisterTextId('');
+    }catch(error){
+      if (error.response) {
+        const { data, status } = error.response;
+        if (status === 400) {
+          
+          setErrorRegisterMessage(data);
+        } else {
+          // Xử lý các lỗi khác (nếu cần)
+          setErrorRegisterMessage('Something went wrong');
+        }
+      } else {
+        setErrorRegisterMessage('Something went wrong');
+      }
+    }
+  }
+
+  const handleChangePassword = async() => {
+    try{
+      console.log(loginEmail);
+      console.log(changePassword);
+      let res = await changePasswordApi(loginEmail);
+      console.log(res);
+      setShowForm(false);
+      setShowConfirm(true);
     }catch(error){
       if (error.response) {
         const { data, status } = error.response;
@@ -130,8 +179,59 @@ const Login = () => {
       } else {
         setErrorRegisterMessage('Something went wrong');
       }
-    }
+    } 
+  }
+
+  const handleConfirmChangePassword = async() => {
+
+    try{
+      console.log(loginEmail);
+      console.log(confirmToken);
+      console.log(changePassword);
+      let res = await confirmTokenChangePassword(loginEmail, confirmToken, changePassword);
+      setShowForm(false);
+      setShowConfirm(false);  
+      setLoginEmail('');
+      setChangePassword('');
+      setLoginPassword('');
+      setConfirmToken('');
+      console.log(res);
+    }catch (error){
+      if (error.response) {
+        const { data, status } = error.response;
+        if (status === 404) {
+          
+          setErrorLoginMessage(data);
+        } else {
+          
+          setErrorRegisterMessage('Something went wrong');
+        }
+      } else {
+        setErrorRegisterMessage('Something went wrong');
+      }
+    } 
     
+  }
+
+  const handleReSendConfirmToken  = async(email) => {
+    try{
+
+      let res = await reSendConfirmToken(email);
+      console.log(res);
+    }catch (error){
+      if (error.response) {
+        const { data, status } = error.response;
+        if (status === 404) {
+          
+          setErrorLoginMessage("email không tồn tại");
+        } else {
+          
+          setErrorRegisterMessage('Something went wrong');
+        }
+      } else {
+        setErrorRegisterMessage('Something went wrong');
+      }
+    } 
     
   }
 
@@ -181,11 +281,15 @@ const Login = () => {
               <div className='inputForm'> 
                 <p className='textHeader'>Nhập mã xác nhận</p>
                 <input className="input" type="email" value={confirmToken} placeholder="Token" onChange={(e) => setConfirmToken( e.target.value)} />
-                <div className="loginBtn btnForm" onClick={handleChangePassword}>Xác nhận</div>
-                <p className="loginText" >Đã có tài khoản? <a  onClick={showLoginForm}>Đăng nhập</a></p>    
+                <div className="loginBtn btnForm" onClick={handleConfirmRegister}>Xác nhận</div>
+                <p className="loginText" ><a  onClick={() => handleReSendConfirmToken(registerEmail)}>Gửi lại mã xác nhận</a></p>  
               </div>      
             )}
 
+            {(!showConfirm && !showForm) && (
+              <p className="loginText" >Đăng kí thành công</p>   
+            )}
+            <p className="loginText" >Đã có tài khoản? <a  onClick={showLoginForm}>Đăng nhập</a></p>  
           </div>
         </div>
       )}
@@ -225,12 +329,15 @@ const Login = () => {
               <div className='inputForm'>
                 <p className='textHeader'>Nhập mã xác nhận</p>
                 <input className="input" type="email" value={confirmToken} placeholder="Token" onChange={(e) => setConfirmToken( e.target.value)} />
-                <div className="loginBtn btnForm" onClick={handleChangePassword}>Xác nhận</div>
+                <div className="loginBtn btnForm" onClick={handleConfirmChangePassword}>Xác nhận</div>
+                <p className="loginText" ><a  onClick={() => handleReSendConfirmToken(loginEmail)}>Gửi lại mã xác nhận</a></p>  
                 {errorLoginMessage && <p className="errorMessage">{errorLoginMessage}</p>}
                           
               </div>
             )}
-
+            {(!showConfirm && !showForm) && (
+            <p className="loginText" >Đổi mật khẩu thành công</p>   
+            )}
             <p className="loginText" >Quay lại <a  onClick={showLoginForm}>Đăng nhập</a></p>   
 
           </div>
