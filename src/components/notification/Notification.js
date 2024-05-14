@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Notification.css";
 import Stomp from "stompjs";
 import SockJS from "sockjs-client";
+import MessageSearchOption from "../MessageSearchOption/MessageSearchOption";
 import {
   getAllFriendRequest,
   confirmFriendRequest,
@@ -59,10 +60,15 @@ const Notification = () => {
   };
 
   return (
-    <div className="notification">
+    <div className="notifications">
       {friendRequests.map((friendRequest, index) => (
-        <div key={index}>
-          <p>{friendRequest.sender.fullname} đã gửi lời mời kết bạn</p>
+        <div className="notification" key={index}>
+          <MessageSearchOption
+            userId={friendRequest.sender.id}
+            avatar={friendRequest.sender.avatar}
+            name={friendRequest.sender.fullname}
+            textId={friendRequest.sender.textId}
+          />
           <div className="btnNotification">
             <button
               className="accept"

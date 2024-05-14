@@ -5,15 +5,14 @@ import MessageOption from "../MessageOption/MessageOption";
 import SendIcon from "@mui/icons-material/Send";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import CloseIcon from "@mui/icons-material/Close";
-import { useParams } from "react-router-dom";
-import {
-  getMessagesOfGroupChat,
-  sendMessage,
-  changeMessage,
-} from "../service/chatService";
+import VideoCallIcon from "@mui/icons-material/VideoCall";
+import { useParams, useNavigate } from "react-router-dom";
+import { getMessagesOfGroupChat, sendMessage } from "../service/chatService";
 import { getInfo } from "../service/userService";
 import Stomp from "stompjs";
 import SockJS from "sockjs-client";
+
+
 
 const MessagePage = () => {
   const contentRef = useRef(null);
@@ -31,12 +30,32 @@ const MessagePage = () => {
   const [inputHeight, setInputHeight] = useState(0);
   let id1 = userId > userId2 ? userId2 : userId;
   let id2 = userId < userId2 ? userId2 : userId;
+  const navigate = useNavigate();
 
   const handleInsertImage = () => {
     let input = document.getElementById("imageInput");
     if (input) {
       input.click();
     }
+  };
+  const editMessage = (messageId, isDeleted) => {
+    const messageIndex = messages.findIndex(
+      (message) => message.id === messageId
+    );
+
+    if (messageIndex === -1) {
+      console.log("Không tìm thấy tin nhắn cần sửa");
+      return;
+    }
+
+    const updatedMessages = [...messages];
+
+    updatedMessages[messageIndex] = {
+      ...updatedMessages[messageIndex],
+      isDeleted: isDeleted,
+    };
+
+    setMessages(updatedMessages);
   };
 
   const getUser = async () => {
@@ -59,14 +78,17 @@ const MessagePage = () => {
     formData.append("content", content);
     formData.append("receiver", userId);
     formData.append("sender", userId2);
-    formData.append("images", inputImages);
-
+    inputImages.forEach((image, index) => {
+      formData.append("images", image);
+    });
+    console.log(inputImages);
     let res = await sendMessage(formData);
-    // console.log(res.data.id);
-    // setMessages([...messages, res.data]);
   };
 
   const handleSendMessage = () => {
+    if (content.trim() === "" && images.length === 0) {
+      return; // Không cho phép gửi tin nhắn khi nội dung và hình ảnh đều trống
+    }
     send();
     setContent("");
     setImages([]);
@@ -129,9 +151,11 @@ const MessagePage = () => {
         console.log(message.body);
         const messageBody = JSON.parse(message.body);
         if (messageBody.type == "new message") {
-          console.log(1);
-          // getMessages();
-          setMessages([...messages, messageBody.message]);
+          setMessages([messageBody.message, ...messages]);
+        }
+
+        if (messageBody.type == "delete message") {
+          setMessages([messageBody.message, ...messages]);
         }
       });
     });
@@ -167,12 +191,53 @@ const MessagePage = () => {
     };
   }, [content, images]);
 
+  const handleVideoCall = async() => {
+
+    
+    try {
+      // Đặt lại content và images
+      
+      // Kiểm tra xem content và images đã được đặt lại hay chưa
+      if (content !== "Đang gọi cho bạn" || images.length > 0) {
+        // Gửi tin nhắn chỉ khi content và images đã được đặt lại
+        const formData = new FormData();
+        formData.append("content", "Đang gọi cho bạn");
+        formData.append("receiver", userId);
+        formData.append("sender", userId2);
+        [].forEach((image, index) => {
+          formData.append("images", image);
+        });
+  
+        // Gửi tin nhắn và đợi kết quả trả về
+        console.log("Sending message...");
+        let res = await sendMessage(formData);
+        console.log("Message sent successfully.");
+  
+        // Xóa nội dung và hình ảnh sau khi tin nhắn đã được gửi
+        setContent("");
+        setImages([]);
+      } else {
+        // Nếu content và images không được đặt lại, thông báo lỗi
+        throw new Error("Không thể gửi tin nhắn với nội dung và hình ảnh trống.");
+      }
+    } catch (error) {
+      console.error("Error handling video call:", error);
+      // Xử lý lỗi ở đây nếu cần
+    }
+
+    navigate(`/video_call/${id1}_${id2}`)
+  }
+
   return (
     <div className={style.MessagePage}>
       {user && (
         <div className={style.header}>
-          <Avatar className={style.avatar} src={user.avatar} />
-          <p className={style.name}>{user.fullname}</p>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Avatar className={style.avatar} src={user.avatar} />
+            <p className={style.name}>{user.fullname}</p>
+          </div>
+
+          <VideoCallIcon className={style.call} onClick = {handleVideoCall} />
         </div>
       )}
       <div
@@ -191,6 +256,7 @@ const MessagePage = () => {
                 images={message.images}
                 userId={userId2}
                 mes_userId={message.user.id}
+                isDeleted={message.isDeleted}
               />
             ))}
         </div>
@@ -207,6 +273,7 @@ const MessagePage = () => {
             onChange={handleImageInput}
             type="file"
             style={{ display: "none" }}
+            multiple
           />
         </div>
         <div className={style.contentInput}>

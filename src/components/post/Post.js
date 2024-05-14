@@ -105,7 +105,17 @@ const Post = forwardRef(
               style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
               {image.map((img, index) => (
-                <img key={index} src={img} alt={`Image ${index + 1}`} />
+                      <div key={index} className={style.di}>
+                      {img.endsWith(".png") || img.endsWith(".jpg") || img.endsWith(".jpeg") ? (
+                        <img src={img} alt={`Image ${index + 1}`} />
+                      ) : img.endsWith(".mp4") || img.endsWith(".avi") || img.endsWith(".mov") ? (
+                        <video controls>
+                          <source src={img} />
+                        </video>
+                      ) : (
+                        <p>Unsupported file format</p>
+                      )}
+                    </div>
               ))}
             </div>
           </div>

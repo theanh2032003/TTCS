@@ -69,11 +69,6 @@ const EditProfile = ({ user, onOptionClick }) => {
     formData.append("fullname", fullname);
     formData.append("bio", bio);
     formData.append("location", location);
-    // console.log(avatar);
-    // console.log(banner);
-    // console.log(fullname);
-    // console.log(bio);
-    // console.log(location);
     let res = axios
       .patch("/user/change_info", formData, {
         headers: {

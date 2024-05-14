@@ -27,8 +27,8 @@ const sendMessage = (formData) => {
   });
 };
 
-const changeMessage = (messageId, content) => {
-  return axios.patch("chat/change_content", { messageId, content });
+const deleteMessage = (messageId, senderId, receiverId) => {
+  return axios.patch("chat/delete", { messageId, senderId, receiverId });
 };
 
-export { getMessagesOfGroupChat, sendMessage, changeMessage };
+export { getMessagesOfGroupChat, sendMessage, deleteMessage };

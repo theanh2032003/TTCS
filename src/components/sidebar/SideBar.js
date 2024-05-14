@@ -9,6 +9,7 @@ import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import { Button } from "@mui/material";
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 
 function SideBar() {
   const userId = localStorage.getItem("userId");
@@ -33,7 +34,7 @@ function SideBar() {
         text="Profile"
         to={`/home/profile/${userId}`}
       />
-      <SideBarOption Icon={MoreHorizIcon} text="More" />
+      <SideBarOption Icon={PeopleOutlineIcon} text="Friend" to={`/home/friends`} />
 
       {/* <Button variant="outlined" className="sidebar__tweet" fullWidth>
         <p>Tweet</p>

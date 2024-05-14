@@ -9,6 +9,8 @@ import Feed from "./components/feed/Feed";
 import EditProfile from "./components/editProfile/EditProfile";
 import PostDetail from "./components/PostDetail/PostDetail";
 import MessagePage from "./components/Message/MessagePage";
+import FriendPage from "./components/friend/FriendPage";
+import VideoCall  from "./components/videoCall/videoCall";
 function App() {
   return (
     <Routes>
@@ -21,10 +23,12 @@ function App() {
         <Route path="post/:postId" element={<PostDetail />} />
         <Route path="message/:userId" element={<MessagePage />} />
         <Route path="message_null" element={<div></div>} />
+        <Route path="friends" element={<FriendPage/>} />
 
         
       </Route>
       <Route path="/" element={<Login />} />
+      <Route path="/video_call/:roomID" element={<VideoCall />} />
     </Routes>
   );
 }

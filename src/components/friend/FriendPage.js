@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import style from "./MessageSearch.module.scss";
+import style from "./FriendPage.module.scss";
 import SearchIcon from "@mui/icons-material/Search";
 import useDebounce from "../module/useDebounce";
 import { searchUserApi, getAllFriend } from "../service/userService";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import MessageSearchOption from "../MessageSearchOption/MessageSearchOption";
-const MessageSearch = () => {
+const FriendPage = () => {
   const [userNameSearch, setUserNameSearch] = useState("");
   const [userDtos, setUserDtos] = useState([]);
   const [friends, setFriends] = useState([]);
@@ -55,12 +55,12 @@ const MessageSearch = () => {
     setShowSearch(false);
     const back = document.getElementById("BackIcon");
     back.style.display = "none";
-    setUserNameSearch('');
+    setUserNameSearch("");
   };
 
   return (
     <div className={style.ListUser}>
-      <h2>Message</h2>
+      <h2>Friends</h2>
 
       <div className={style.ListUserHeader}>
         <KeyboardBackspaceIcon
@@ -89,7 +89,7 @@ const MessageSearch = () => {
             avatar={userDto.avatar}
             name={userDto.fullname}
             textId={userDto.textId}
-            to={`/home/message/${userDto.id}`}
+            to={`/home/profile/${userDto.id}`}
           />
         ))}
       {!showSearch &&
@@ -100,12 +100,11 @@ const MessageSearch = () => {
             avatar={userDto.avatar}
             name={userDto.fullname}
             textId={userDto.textId}
-            to={`/home/message/${userDto.id}`}
-
+            to={`/home/profile/${userDto.id}`}
           />
         ))}
     </div>
   );
 };
 
-export default MessageSearch;
+export default FriendPage;

@@ -12,6 +12,7 @@ import { getAllPostOfNewFeed } from "../service/postService";
 import { searchUserApi } from "../service/userService";
 import { Route, Routes, useLocation } from "react-router-dom";
 import MessageSearch from "../MessageSearch/MessageSearch";
+import FriendPage from "../friend/FriendPage";
 const Home = () => {
   const location = useLocation();
   const showWidget =
@@ -30,6 +31,8 @@ const Home = () => {
             <Route path="/notification" element={<Notification />} />
             <Route path="/edit_profile" element={<EditProfile />} />
             <Route path="/post/:postId" element={<PostDetail />} />
+            <Route path="/friends" element={<FriendPage />} />
+
           </Routes>
         </div>
       )}

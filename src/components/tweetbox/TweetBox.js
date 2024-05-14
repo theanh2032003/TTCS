@@ -5,6 +5,7 @@ import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import CloseIcon from "@mui/icons-material/Close";
 import { getInfo } from "../service/userService";
 import axios from "../service/customAxios";
+
 const TweetBox = () => {
   const [tweetMessage, setTweetMessage] = useState("");
   const [tweetImages, setTweetImages] = useState([]);
@@ -46,9 +47,12 @@ const TweetBox = () => {
   };
 
   const handleImageDelete = (index) => {
-    const newImages = [...tweetImages];
+    const newTweetImages = [...tweetImages];
+    newTweetImages.splice(index, 1);
+    setTweetImages(newTweetImages);
+    const newImages = [...images];
     newImages.splice(index, 1);
-    setTweetImages(newImages);
+    setImages(newImages);
   };
 
   const sendTweet = async (e) => {
@@ -103,15 +107,24 @@ const TweetBox = () => {
           <InsertPhotoIcon className="insertPhotoIcon" />
         </label>
         <div className="tweetBox__imagesPreview">
-          {tweetImages.map((image, index) => (
-            <div key={index} className="uploaded-image">
-              <img src={image} alt={`Image ${index}`} />
-              <CloseIcon
-                className="delete_image"
-                onClick={() => handleImageDelete(index)}
-              />
-            </div>
-          ))}
+          {images &&
+            images.map((image, index) => (
+              <div key={index} className="uploaded-image">
+                {/* <p>{image.type}</p> */}
+                {/* <img src={image} alt={`Image ${index}`} />
+              <video src={image}></video>*/}
+                {image.type === "image/png" && <img src={tweetImages[index]} />}
+                {image.type === "video/mp4" && (
+                  <video controls>
+                    <source src={tweetImages[index]} />
+                  </video>
+                )}
+                <CloseIcon
+                  className="delete_image"
+                  onClick={() => handleImageDelete(index)}
+                />
+              </div>
+            ))}
         </div>
         <Button
           onClick={sendTweet}

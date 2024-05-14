@@ -1,13 +1,18 @@
-.notification {
+.notifications {
   background-color: white;
   padding: 10px;
   margin-bottom: 10px;
-  height: fit-content;
-  
+  height: 100vh;
 }
 
-.notification p {
-  margin: 0;
+.notification {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.notification:hover {
+  background-color: var(--twitter-background);
 }
 
 .btnNotification {
@@ -18,7 +23,7 @@
 
 .accept,
 .deleteRequest {
-  background-color: #4caf50;
+  background-color: var(--twitter-color);
   color: white;
   border: none;
   padding: 8px 16px;
@@ -32,11 +37,13 @@
 }
 
 .deleteRequest {
-  background-color: #f44336;
+  background-color: grey;
+  color: black;
 }
 
 .accept:hover {
-  background-color: #5bb55e;
+  /* background-color: var(--twitter-color); */
+  opacity: 0.8;
 }
 
 .deleteRequest:hover {

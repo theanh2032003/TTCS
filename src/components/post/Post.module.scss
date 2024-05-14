@@ -59,11 +59,21 @@
         display: flex;
         transition: transform 0.1s ease; /* Thêm hiệu ứng khi chuyển ảnh */
 
-        img {
-          flex-shrink: 0; /* Ảnh không bị co lại khi kích thước container thay đổi */
-          width: 100%;
-          height: auto;
-          border-radius: 8px 8px 0 0;
+        .di {
+          width: 100%; /* Kế thừa chiều rộng từ div cha */
+          flex-shrink: 0; /* Đảm bảo các phần tử không bị co lại khi container thay đổi kích thước */
+    
+          img {
+            width: 100%; /* Ảnh chiếm toàn bộ chiều rộng của div */
+            height: auto; /* Chiều cao tự động điều chỉnh để giữ tỷ lệ */
+            border-radius: 8px 8px 0 0; /* Bo tròn góc cho ảnh */
+          }
+    
+          video {
+            width: 100%; /* Video chiếm toàn bộ chiều rộng của div */
+            height: auto; /* Chiều cao tự động điều chỉnh để giữ tỷ lệ */
+            border-radius: 8px 8px 0 0; /* Bo tròn góc cho video */
+          }
         }
       }
     }

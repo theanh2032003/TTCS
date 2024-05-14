@@ -7,6 +7,7 @@ import {
   createComment,
   getAll1AncestorOfPost,
 } from "../service/commentService";
+import { getInfo } from "../service/userService";
 import style from "./PostDetail.module.scss";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SendIcon from "@mui/icons-material/Send";
@@ -17,10 +18,18 @@ const PostDetail = () => {
   const [comments, setComments] = useState([]);
   const { postId } = useParams();
   const [text, setText] = useState("");
+  const [user, setUser] = useState();
   const navigate = useNavigate();
 
   const goBack = () => {
     navigate(-1);
+  };
+
+  const getUserInfo = async () => {
+    let userId = localStorage.getItem("userId");
+    let res = await getInfo(userId);
+    console.log(res.data);
+    setUser(res.data);
   };
 
   const getPost = async () => {
@@ -45,6 +54,7 @@ const PostDetail = () => {
     console.log(postId);
     getPost();
     getComment();
+    getUserInfo();
   }, [postId]);
 
   useEffect(() => {
@@ -73,7 +83,7 @@ const PostDetail = () => {
       )}
 
       <div className={style.createComment}>
-        {post && <Avatar src={post.user.avatar} sx={{ fontSize: "25px" }} />}
+        {user && <Avatar src={user.avatar} sx={{ fontSize: "25px" }} />}
 
         <div className={style.inputCommentArae}>
           <textarea

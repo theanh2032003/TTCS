@@ -109,7 +109,7 @@ const Comment = ({
                   content={cmt.content}
                   time={cmt.createAt}
                   descendants={cmt.descendants}
-                  
+                  postId={postId}
                 />
               );
             })}

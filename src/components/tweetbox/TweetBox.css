@@ -43,7 +43,7 @@
     flex-wrap: wrap;
   }
   
-  .tweetBox__imagesPreview img {
+  .tweetBox__imagesPreview img,video{
     max-width: 100%; 
     height: auto; 
   }

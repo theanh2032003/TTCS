@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Avatar } from "@mui/material";
 import style from "./MessageSearchOption.module.scss";
-const MessageSearchOption = ({ userId, avatar, name, textId }) => {
+const MessageSearchOption = ({ userId, avatar, name, textId, to }) => {
 
   const navigate = useNavigate();
 
@@ -10,7 +10,7 @@ const MessageSearchOption = ({ userId, avatar, name, textId }) => {
     <div
       className={style.user}
       onClick={() => {
-        navigate(`/home/message/${userId}`);
+        navigate(to);
       }}
     >
       <Avatar
